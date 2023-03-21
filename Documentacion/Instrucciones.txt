@@ -1,0 +1,3 @@
+Cuando se prueba en local en el archivo getData.js debemos comentar el handler y descomentar la function junto el module exports y para aws desbloquear el handler y comentar la function y el module exports
+
+en la clase api debemos en local comentar el handler y aws descomentarlo
