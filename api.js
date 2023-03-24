@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/api", router);
 app.use("*", (req, res) =>
-  res.status(404).send("No existe la ruta de la petición.")
+  res.status(404).send("No existe la ruta de la petición. :d")
 );
 
 try {
