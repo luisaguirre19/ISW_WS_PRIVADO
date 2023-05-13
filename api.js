@@ -48,11 +48,11 @@ try {
     let parametros = request.body;
 
     parametros = [{
-      "operacion":'L',
-      "sub_operacion":'V',
-      "correo":request.body.correo,
-      "pass":request.body.pass,
-      "sp":"principal_productor"
+      operacion: "L",
+      sub_operacion: "V",
+      correo: request.query.correo,
+      pass: request.query.pass,
+      sp: "principal",
   }]
     try {
       dbocategoria.getData(parametros).then((result) => {
