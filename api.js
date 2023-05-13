@@ -26,10 +26,12 @@ try {
       {
         operacion: "C",
         sub_operacion: "A",
-        id_generico: request.query.id_product,
-        sp: "principal_beneficio",
+        id_generico: request.query.id_usuario,
+        tipo: request.query.estado,
+        sp: "principal_beneficio"
       },
     ];
+    console.log(parametros)
     dbocategoria.getData(parametros).then((result) => {
       if (result == 1) {
         res
@@ -51,15 +53,18 @@ try {
             .status(500)
             .send("Revisa la parametrización enviada a la base de datos.");
         } else {
-          if (result[0].resp == "Si") {
-            security
-              .creaToken(result[0].usuario, result[0].id_login)
-              .then((result) => {
-                res.json(result);
-              });
-          } else {
-            res.status(300).send("Verfica los datos ingresados");
-          }
+          res.json(result);
+
+          // if (result[0].resp == "Si") {
+          //   res.json(result);
+            // security
+            //   .creaToken(result[0].usuario, result[0].id_login)
+            //   .then((result) => {
+            //     res.json(result);
+            //   });
+          // } else {
+          //   res.status(300).send("Verfica los datos ingresados");
+          // }
         }
       });
     } catch (error) {
@@ -98,6 +103,38 @@ try {
       res.status(100).send("Revisa la estructura de la parametrización.");
     }
   });
+
+    //OBTENEMOS LOS DATOS DEL USUARIO
+    router.route("/productores").get((request, res) => {
+      try {
+        security.validaSeguridad(request.headers.authorization).then((resp) => {
+          if (resp == "N" || !resp) {
+            return res.status(401).json({ error: "No autorizado" });
+          } else if (resp == "T") {
+            return res.status(403).json({ error: "No autorizado, token expiró" });
+          }
+          parametros = [
+            {
+              operacion: "L",
+              sub_operacion: "P",
+              id_generico: resp,
+              sp: "principal_beneficio",
+            },
+          ];
+          dbocategoria.getData(parametros).then((result) => {
+            if (result == 1) {
+              res
+                .status(500)
+                .send("Revisa la parametrización enviada a la base de datos.");
+            } else {
+              res.json(result);
+            }
+          });
+        });
+      } catch (error) {
+        res.status(100).send("Revisa la estructura de la parametrización.");
+      }
+    });
 
   //VALIDAMOS LAS CREDENCIALES DE LOGIN
   router.route("/login").get((request, res) => {
