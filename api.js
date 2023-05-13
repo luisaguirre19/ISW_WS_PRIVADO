@@ -50,8 +50,8 @@ try {
     parametros = [{
       operacion: "L",
       sub_operacion: "V",
-      correo: request.query.correo,
-      pass: request.query.pass,
+      correo: request.body.correo,
+      pass: request.body.pass,
       sp: "principal",
   }]
     try {
