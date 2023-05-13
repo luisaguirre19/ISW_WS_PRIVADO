@@ -46,6 +46,14 @@ try {
   //CREAMOS UNA CUENTA DEL CLIENTE
   router.route("/count").post((request, res) => {
     let parametros = request.body;
+
+    parametros = [{
+      "operacion":'L',
+      "sub_operacion":'V',
+      "correo":request.body.correo,
+      "pass":request.body.pass,
+      "sp":"principal_productor"
+  }]
     try {
       dbocategoria.getData(parametros).then((result) => {
         if (result == 1) {
