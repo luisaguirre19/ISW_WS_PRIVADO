@@ -177,6 +177,70 @@ try {
       res.status(100).send("Revisa la estructura de la parametrización.");
     }
   });
+
+
+  //CREAMOS UNA CUENTA DEL CLIENTE
+  router.route("/guardia").post((request, res) => {
+    let parametros = request.body;
+
+    parametros = [{
+      operacion: "G",
+      sub_operacion: "S",
+      codigo_qr: request.body.codigo_qr,
+      sp: "principal",
+  }]
+    try {
+      dbocategoria.getData(parametros).then((result) => {
+        if (result == 1) {
+          res
+            .status(500)
+            .send("Revisa la parametrización enviada a la base de datos.");
+        } else {
+          res.json(result);
+
+          // if (result[0].resp == "Si") {
+          //   res.json(result);
+            // security
+            //   .creaToken(result[0].usuario, result[0].id_login)
+            //   .then((result) => {
+            //     res.json(result);
+            //   });
+          // } else {
+          //   res.status(300).send("Verfica los datos ingresados");
+          // }
+        }
+      });
+    } catch (error) {
+      res.status(100).send("Revisa la estructura de la parametrización.");
+    }
+  });
+
+  router.route('/cuenta_envio').post((request,res)=>{
+    try {
+      console.log("aca " + request.body.codigo_qr)
+        parametros = [{
+            "operacion":'E',
+            "sub_operacion":'I',
+            "id_envio":request.body.id_envio,
+            "id_cuenta":request.body.id_cuenta,
+            "peso":request.body.peso,
+            "estado":request.body.estado,
+            "vehiculo":request.body.vehiculo,
+            "codigo_qr":request.body.codigo_qr,
+            "sp":"principal"
+        }]
+        dbocategoria.getData(parametros).then(result => {
+            if(result == 1){
+                res.status(500).send("Revisa la parametrización enviada a la base de datos.");
+            }else{
+                res.json(result);    
+            }
+        })
+    } catch (error) {
+        res.status(100).send("Revisa la estructura de la parametrización.");
+    }
+})
+
 } catch (error) {
   res.status(200).send("Revisa la estructura de la parametrización.");
 }
