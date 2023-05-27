@@ -241,6 +241,33 @@ try {
     }
 })
 
+router.route('/incripcion').post((request,res)=>{
+  try {
+      parametros = [{
+          "operacion":'L',
+          "sub_operacion":'N',
+          "correo":request.body.correo,
+          "pass":request.body.pass,
+          "nombres":request.body.nombres,
+          "apellidos":request.body.apellidos,
+          "productor":request.body.productor,
+          "telefono":request.body.telefonos,
+          "sp":"principal_beneficio"
+      }]
+      dbocategoria.getData(parametros).then(result => {
+          if(result == 1){
+              res.status(500).send("Revisa la parametrización enviada a la base de datos.");
+          }else{
+              res.json(result);    
+          }
+      })
+  } catch (error) {
+      res.status(100).send("Revisa la estructura de la parametrización.");
+  }
+})
+
+
+
 } catch (error) {
   res.status(200).send("Revisa la estructura de la parametrización.");
 }
