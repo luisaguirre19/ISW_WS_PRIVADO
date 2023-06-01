@@ -2,6 +2,8 @@
 
 const dbocategoria = require("./Routes/getData");
 const security = require("./Seguridad/Security");
+const correo = require("./Routes/envio_mail");
+
 const jwt = require("jsonwebtoken");
 var express = require("express");
 var bodyParser = require("body-parser");
@@ -10,6 +12,8 @@ const { request, res } = require("express");
 
 var app = express();
 var router = express.Router();
+
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -26,13 +30,13 @@ try {
       {
         operacion: "C",
         sub_operacion: "A",
-        id_generico: request.query.id_usuario,
+        id_generico: Number(request.query.id_usuario),
         tipo: request.query.estado,
         sp: "principal_beneficio"
       },
     ];
-    console.log(parametros)
     dbocategoria.getData(parametros).then((result) => {
+      console.log("venimos " + result)
       if (result == 1) {
         res
           .status(500)
@@ -264,6 +268,17 @@ router.route('/incripcion').post((request,res)=>{
   } catch (error) {
       res.status(100).send("Revisa la estructura de la parametrización.");
   }
+})
+
+router.route('/envio_correo').post((request,res)=>{
+  console.log('<------ ' + request.body.asunto)
+  console.log('<------  ' + request.body.receptor)
+  console.log('<------  ' + request.body.msg)
+  console.log('<------  ' + request.body.para )
+
+  correo.envio_mail(request.body.asunto,request.body.receptor, request.body.msg, request.body.para ).then(resp=>{
+    res.status(200).send("Enviado");
+  })
 })
 
 
