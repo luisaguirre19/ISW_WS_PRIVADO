@@ -270,12 +270,49 @@ router.route('/incripcion').post((request,res)=>{
   }
 })
 
-router.route('/envio_correo').post((request,res)=>{
-  console.log('<------ ' + request.body.asunto)
-  console.log('<------  ' + request.body.receptor)
-  console.log('<------  ' + request.body.msg)
-  console.log('<------  ' + request.body.para )
+router.route('/valida_peso').post((request,res)=>{
+  try {
+      parametros = [{
+          "operacion":'P',
+          "sub_operacion":'S',
+          "id_envio":request.body.p_identificadorEnvio,
+          "sp":"principal_beneficio"
+      }]
+      dbocategoria.getData(parametros).then(result => {
+          if(result == 1){
+              res.status(500).send("Revisa la parametrización enviada a la base de datos.");
+          }else{
+              res.json(result);    
+          }
+      })
+  } catch (error) {
+      res.status(100).send("Revisa la estructura de la parametrización.");
+  }
+})
 
+router.route('/inserta_peso').post((request,res)=>{
+  try {
+      parametros = [{
+          "operacion":'P',
+          "sub_operacion":'I',
+          "id_envio":request.body.p_identificadorEnvio,
+          "peso":request.body.p_cantPeso,
+          "sp":"principal_beneficio"
+      }]
+      dbocategoria.getData(parametros).then(result => {
+          if(result == 1){
+              res.status(500).send("Revisa la parametrización enviada a la base de datos.");
+          }else{
+              res.json(result);    
+          }
+      })
+  } catch (error) {
+      res.status(100).send("Revisa la estructura de la parametrización.");
+  }
+})
+
+
+router.route('/envio_correo').post((request,res)=>{
   correo.envio_mail(request.body.asunto,request.body.receptor, request.body.msg, request.body.para ).then(resp=>{
     res.status(200).send("Enviado");
   })
